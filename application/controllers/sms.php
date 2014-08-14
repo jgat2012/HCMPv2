@@ -725,7 +725,7 @@ class sms extends MY_Controller {
 			$subject = $county_name . "'s Weekly Report";
 			$message = $county_name . "'s Weekly Potential Expiries Report";
 			$message .= "Find attached an excel sheet with the breakdown for the Potential Expiries for the county";
-			$email_address = "collinsojenge@gmail.com,smutheu@clintonfoundation.org,kelvinmwas@gmail.com";
+			$email_address = "collinsojenge@gmail.com,smutheu@clintonhealthaccess.org,kelvinmwas@gmail.com";
 			//$email_address = $this->get_county_email($county_id);
 			//$bcc = $this->get_bcc_notifications();
 			// $cc_email = "";

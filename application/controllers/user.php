@@ -236,7 +236,7 @@ class User extends MY_Controller {
                           <td>
                           Hi ' . $Usersname . ', </br>
 		<p>
-		You are HCMP account username '.$email_address.'.You recently requested for a password reset.</br>
+		HCMP account username '.$email_address.'.You recently requested for a password reset.</br>
 		If you made this request ,this is your reset code.</br></p> 
 	
 		<table class="twelve columns">
@@ -274,9 +274,7 @@ class User extends MY_Controller {
 
                     </td>
                   </tr>
-                </table>
-
-';
+                </table>';
 
 				//exit;
 
@@ -516,6 +514,7 @@ class User extends MY_Controller {
 			$facility_id=$this -> session -> userdata('facility_id');
 			$district_code=$this -> session -> userdata('district_id');
 			$county=$this -> session -> userdata('county_id');
+
 			break;
 			case 'district':
 				
@@ -556,9 +555,11 @@ class User extends MY_Controller {
 				$range = microtime(true);
 				$activation = rand(0, $range);
 				//encrypt code to be saved
-				$save_activation_code = md5($activation);
+				$save_activation_code = $activation;
+
+				$save_activation_code = $activation;
 			$result=base_url().'assets/img/coat_of_arms-resized1.png';
-			
+
 			$phone=$telephone;
 			$message='Hi, your activation code is '.$activation;
 			$this -> hcmp_functions -> send_sms($phones,$message);
@@ -666,32 +667,10 @@ class User extends MY_Controller {
                 <table class="row callout">
                   <tr>
                     <td class="wrapper last">
-                    </td>
+
                   </tr>
-                </table>
+                </table>'; 
 
-                <table class="row footer">
-                  <tr>
-                    <td class="wrapper">
-
-                    </td>
-                    <td class="wrapper last">
-
-                      <table class="six columns">
-                        <tr>
-                          <td class="last right-text-pad">
-                            <h5>Contact Info:</h5>
-                            <p>Phone: </p>
-                            <p>Email: <a href="mailto:hcmpkenya@gmail.com">hcmpkenya@gmail.com</a></p>
-                          </td>
-                          <td class="expander"></td>
-                        </tr>
-                      </table>
-
-                    </td>
-                  </tr>';
-
-				
 				
 				$this -> hcmp_functions -> send_email($email_address, $message, $subject, $attach_file = NULL, $bcc_email = NULL, $cc_email = NULL);
 
@@ -760,8 +739,8 @@ endif;
 		public function activation($myurl){
 			
 			$myurl=$this->uri->segment(3);
-			echo $cipher= md5($myurl);
-			exit;			
+			$cipher= $myurl;
+						
 			//query to find match 
 			Users::check_activation($cipher);
 			$restrict= count(Users::check_activation($cipher));
@@ -780,8 +759,9 @@ endif;
 			
 			$email = $_POST['username'];
 			$password = $_POST['new_password'];
+
 			$myurl=$this->uri->segment(3);
-			
+
 			//confirm user exists and is inactive
 			
 			$data=Users::check_user_exist_activate($email);

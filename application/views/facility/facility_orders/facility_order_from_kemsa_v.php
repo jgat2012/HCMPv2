@@ -174,10 +174,12 @@ $(document).ready(function() {
 	// add the item to the order list			
 	$('#main-content').on("click", ".add_item", function (){
 	 var check_if_the_user_has_selected_a_commodity=$('#desc').val();
+
 	 if(check_if_the_user_has_selected_a_commodity==0){
 	 	alert("Please select a commodity first");
 	 	return;
-	 }	
+	 }
+
 	// add the items here to the order form
 	  $("#example" ).dataTable().fnAddData( [ 
   	 '<input type="hidden" class="commodity_name" name="commodity_name['+new_count+']" value="'+$("#desc option:selected").text()+'" />'+

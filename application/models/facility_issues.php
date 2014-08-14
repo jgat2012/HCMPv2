@@ -62,7 +62,7 @@ class facility_issues extends Doctrine_Record {
      ->fetchAll("SELECT f.date_issued,f.expiry_date,f.batch_no,c.unit_size,f.s11_No,f.balance_as_of,f.adjustmentnve,
 		f.adjustmentpve,f.qty_issued,u.fname,u.lname, f. issued_to as service_point_name 
 		FROM facility_issues f INNER JOIN commodities c 
-		ON c.id=f.commodity_id  INNER JOIN hcmp.user u 
+		ON c.id=f.commodity_id  INNER JOIN user u 
 		ON f.issued_by = u.id WHERE f.facility_code=$facility_code
 		AND f.status =1 AND f.commodity_id=$commodity_id
 		AND f.date_issued BETWEEN '$convertfrom' 

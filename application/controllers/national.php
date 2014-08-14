@@ -42,8 +42,9 @@ class national extends MY_Controller
 		$data['title'] = "National Dashboard";
         $data['maps'] = json_encode($finalMap);
         $data['counties']=$county_name;
-		
-        $this -> load -> view("national/national_v",$data);
+
+        $this -> load -> view("national/national_v.php",$data);
+
     } 
     public function search()
     {
@@ -354,7 +355,7 @@ or f.`owner` LIKE  '%community%' or f.`owner` LIKE  '%public%' or f.`owner` LIKE
 			        f_s.expiry_date < NOW()
 			            and d.id = f_s.commodity_id
 			            and year(f_s.expiry_date) = $year
-			            AND  (f_s.status =1 or f_s.status =2)
+			            AND  (f_s.status =1 or f_s.status =2 )
 			    GROUP BY d.id , f_s.facility_code having total > 1) 
 		    temp ON temp.facility_code = f.facility_code
 				where
@@ -1165,7 +1166,7 @@ order by user.id asc
 		$this -> load -> view('shared_files/template/plain_template_v', $data);
  	
  }
- 
+
 	 public function reports(){
 	 	
 		$data['county'] = Counties::getAll();
@@ -1195,6 +1196,7 @@ order by user.id asc
 		$username = $_POST['username'];
 		$facility_id = $_POST['facility_id'];
 	 }
+
 }   
     
 

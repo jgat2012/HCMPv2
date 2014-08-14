@@ -33,11 +33,13 @@ class Commodities extends Doctrine_Record {
 		
 		return $commodities;
 	}
+
 	public static function getAll_json() {
 		$query = Doctrine_Query::create() -> select("*") -> from("commodities")->where("status=1");
 		$commodities = $query -> execute(array(), Doctrine::HYDRATE_ARRAY);
 		return $commodities;
 	}
+
 	public static function get_all_2() {
 		$query=Doctrine_Manager::getInstance()->getCurrentConnection()->fetchAll("select * from commodities where status=1 order by commodity_name asc");	
 		return $query;

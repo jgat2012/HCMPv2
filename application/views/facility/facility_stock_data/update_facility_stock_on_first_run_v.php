@@ -22,11 +22,13 @@
 </p>
             </div>
             <?php if(isset($import)): ?>
+
                     <div style="height:auto; margin-bottom: 2px" class="warning message col-md-5" id="">        
         <h5> 1) Set up facility stock</h5> 
             <p>
          This process can take up to 1 minute, to avoid getting duplicates please be patient do not click Finish Importing button twice 
             </p>
+
         </div>
    
             <?php endif; ?>
@@ -131,6 +133,9 @@
 </div>
 <hr />
 <div class="container-fluid">
+
+	<div style="float: right">
+		      <button type="button" class="importing btn btn-sm btn-success">
     <div style="float: right">
         <?php if(!isset($import)): ?>
         <a href="<?php echo base_url('reports/create_excel_facility_stock_template') ?>" >

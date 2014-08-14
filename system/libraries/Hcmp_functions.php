@@ -3,12 +3,15 @@
  * @author Kariuki
  */
 class Hcmp_functions extends MY_Controller {
-	
-	var $test_mode=TRUE;
+
+	var $test_mode=FALSE;
+
 		function __construct() {
 		parent::__construct();
 		$this -> load -> helper(array('url','file','download'));
+
 		$this -> load -> library(array('PHPExcel/PHPExcel','mpdf/mpdf'));
+
 	}
 public function send_stock_update_sms(){
        $facility_name = $this -> session -> userdata('full_name');
@@ -171,7 +174,14 @@ public function send_order_approval_email($message,$subject,$attach_file,$facili
 	  $email_address=$this->get_facility_email($facility_code);
 	  $cc_email .=$this->get_ddp_email($data['district']);	  
 	  else:		  
-		  $email_address=($this->test_mode)?'kariuki.jackson@outlook.com,': 'kariuki.jackson@outlook.com,'; 
+
+		   $email_address=($this->test_mode)?'kariukijackson@gmail.com,': 'shamim.kuppuswamy@kemsa.co.ke,
+samuel.wataku@kemsa.co.ke,
+jmunyu@kemsa.co.ke,
+imugada@kemsa.co.ke,
+laban.okune@kemsa.co.ke,
+samuel.wataku@kemsa.co.ke,'; 
+
        
 	  $cc_email .=$this->get_ddp_email($data['district']);
 	   $cc_email .=$this->get_facility_email($facility_code);

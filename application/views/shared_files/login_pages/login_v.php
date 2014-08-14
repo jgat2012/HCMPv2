@@ -122,7 +122,9 @@ unset($popup);
                 
  <div class="row">
         <div class="col-md-3">
-        	<a href="<?php echo base_url('national/demo_accounts') ?>"><button class="btn btn-primary ">Demo Site Login Credentials </button></div></a>
+
+       <!--<a href="<?php echo base_url('national/demo_accounts') ?>"><button class="btn btn-primary ">Demo Site Login Credentials </button></a>--></div>
+
   <div class="col-md-6"> 
   			<div class="row">
           <div class="col-md-1"></div>

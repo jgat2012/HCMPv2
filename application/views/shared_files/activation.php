@@ -47,6 +47,7 @@ body.loading .modal {
 				
 				
 	</div>
+
 	<div class="container-fluid">
 		
 		<div class="row">
@@ -72,6 +73,7 @@ unset($popup);
 		</div>
 		
 	</div>
+
 	
 <div class="container">
     <div class="row">
@@ -236,6 +238,7 @@ $(document).ready(function () {
 				alert('Please make sure no field is empty');
 			return;
 			}
+
 	  
 	  if(newps!= newpsconfirm){
 						
@@ -265,7 +268,7 @@ $(document).ready(function () {
           beforeSend: function() {
             //$(div).html("");
             var answer = confirm("Are you sure you want to proceed?");
-            			
+
         if (answer){
             $('body').addClass("loading");
         } else {

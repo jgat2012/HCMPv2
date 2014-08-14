@@ -110,7 +110,8 @@ $(document).ready(function() {
 	 scrollContainer: function($table){ return $table.closest('.table-responsive'); }
 	});	
 //step one load all the facility data here
-var facility_stock_data=<?php echo $facility_stock_data;     ?>;
+var facility_stock_data=<?php echo $facility_stock_data;?>;
+
             ///when changing the commodity combobox
       		$(".desc").on('change',function(){
       		var row_id=$(this).closest("tr").index();	
