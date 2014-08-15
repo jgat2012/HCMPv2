@@ -66,7 +66,7 @@ if ($access_level=="rca"){
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title><?php echo $title; ?></title>
 
-<link rel="icon" href="<?php echo base_url().'Images/coat_of_arms.png'?>" type="image/x-icon" />
+<link rel="icon" href="<?php echo base_url().'assets/img/coat_of_arms.png'?>" type="image/x-icon" />
 <link href="<?php echo base_url().'assets/CSS/style.css'?>" type="text/css" rel="stylesheet"/> 
 <link href="<?php echo base_url() . 'assets/boot-strap3/css/bootstrap.min.css' ?>" type="text/css" rel="stylesheet"/>
 <link href="<?php echo base_url() . 'assets/boot-strap3/css/bootstrap-responsive.css' ?>" type="text/css" rel="stylesheet"/>

@@ -928,21 +928,25 @@ class Eid_Management extends Home_controller {
 	}
 	
 	function lab_both_taqman_abbot_report_submission($lab_id,$year,$lastmonth){
-            $ctquery=$this -> db ->query("SELECT COUNT(taq.ID) as 'ctaqsubmission',taq.received as taqr from `eid_taqmanprocurement` taq where
-			taq.monthofrecordset='$lastmonth' and taq.yearofrecordset='$year' and taq.lab='$lab_id' "); 
-			
-			$ctss = $ctquery ->result_array();
-	                
-            $ctquery1=$this -> db ->query("SELECT COUNT(abb.ID) as 'ctaqsubmission', abb.received as abbr from `eid_abbottprocurement` abb where
-			abb.monthofrecordset='$lastmonth' and abb.yearofrecordset='$year' and abb.lab='$lab_id' "); 
-			
-			$ctss1 = $ctquery1 ->result_array();
-	                
-			$data['ctkit'] = $ctss[0]['ctaqsubmission'] + $ctss1[0]['ctaqsubmission'];
-			$data['taq'] = $ctss[0]['taqr'];
-			$data['abb'] = $ctss1[0]['abbr'];
-            return $data;
-	    
+        $ctquery=$this -> db ->query("SELECT COUNT(taq.ID) as 'ctaqsubmission',taq.received as taqr from `eid_taqmanprocurement` taq where
+		taq.monthofrecordset='$lastmonth' and taq.yearofrecordset='$year' and taq.lab='$lab_id' "); 
+		
+		$ctss = $ctquery ->result_array();
+                
+        $ctquery1=$this -> db ->query("SELECT COUNT(abb.ID) as 'ctaqsubmission', abb.received as abbr from `eid_abbottprocurement` abb where
+		abb.monthofrecordset='$lastmonth' and abb.yearofrecordset='$year' and abb.lab='$lab_id' "); 
+		
+		$ctss1 = $ctquery1 ->result_array();
+                
+		$data['ctkit'] = $ctss[0]['ctaqsubmission'] + $ctss1[0]['ctaqsubmission'];
+		$data['taq'] = $ctss[0]['taqr'];
+		$data['abb'] = $ctss1[0]['abbr'];
+        return $data;
+	}
+	
+	//Download taqman and abbott submission reports
+	function download_submission_report($type = ""){
+		
 	}
 
    
