@@ -75,24 +75,24 @@ $(document).ready(function(){
 		//Get consumption report title name
 		var text = $(".eid_menus.active").text();
 		var request = $.ajax({
-				url : _url,
-				type : 'post',
-				data : {
-					"testinglab" : lab,
-					"lab_name"   : lab_name,		
-					"platform"   : platform,
-					"month"      : month,
-					"monthyear"  : year,
-					"report_text": text
-				},
-				dataType : "html"
-			});
-			request.done(function(data) {
-				$( "#inner_wrapper" ).html( data);
-			});
-			request.fail(function(jqXHR, textStatus) {
-				
-			});
+			url : _url,
+			type : 'post',
+			data : {
+				"testinglab" : lab,
+				"lab_name"   : lab_name,		
+				"platform"   : platform,
+				"month"      : month,
+				"monthyear"  : year,
+				"report_text": text
+			},
+			dataType : "html"
+		});
+		request.done(function(data) {
+			$( "#inner_wrapper" ).html( data);
+		});
+		request.fail(function(jqXHR, textStatus) {
+			
+		});
 	});
 	
 	//Approval button
@@ -104,6 +104,92 @@ $(document).ready(function(){
 		document.location.hash ="eid_management/consumption";
 	});
 	
+	//Display approval button clicked
+	$(document).on("click","#btn_approval_report",function(event){
+		event.preventDefault();
+		
+		var _url = base_url+"eid_management/displayconsumption";
+		var lab = $("#subm_testing_lab").val();
+		var lab_name = $("#labname").val();
+		var platform = $("#platform").val();
+		var month = $("#lastmonth").val();
+		var month_name = $("#monthname").val();
+		var year =  $("#year").val();
+		
+		var request = $.ajax({
+			url : _url,
+			type : 'post',
+			data : {
+				"testinglab" : lab,
+				"lab_name"   : lab_name,		
+				"platform"   : platform,
+				"month"      : month,
+				"monthyear"  : year,
+				"report_text": "",
+				"approval"   : "1"
+			},
+			dataType : "html"
+		});
+		request.done(function(data) {
+			$( "#inner_wrapper" ).html( data);
+		});
+		request.fail(function(jqXHR, textStatus) {
+			
+		});
+	});
+	
+	//Submit approval form data
+	$(document).on("submit","#fmApproval",function(event) {
+		event.preventDefault();
+		
+		var url = $(this).attr("action");
+		var data = $("#fmApproval").serialize();
+		
+ 		var posting = $.ajax({
+						  type		: "POST",
+						  url		: url,
+						  data		: data,
+						  dataType	: "json"
+					  });
+ 		
+ 		posting.done(function(msg) {
+ 			if(msg.platformresult==1 && msg.platform=='TAQMAN'){//..has abbott machine
+ 				if(msg.platform=='TAQMAN' ){
+ 					var platform_id = 2;
+ 				}else{
+ 					var platform_id = 1;
+ 				}
+ 				var _url = base_url+"eid_management/displayconsumption";
+ 				var request = $.ajax({
+					url : _url,
+					type : 'post',
+					data : {
+						"testinglab" : msg.lab,
+						"lab_name"   : msg.lab_name,		
+						"platform"   : platform_id,
+						"month"      : msg.month,
+						"monthyear"  : msg.year,
+						"report_text": "",
+						"approval"   : "1"
+					},
+					dataType : "html"
+				});
+				request.done(function(data) {
+					$( "#inner_wrapper" ).html( data);
+					//alert(data)
+				});
+				request.fail(function(jqXHR, textStatus) {
+					
+				});
+ 				
+ 			}else{// No abbott machine
+ 				//alert("No abbott machine");
+ 			}
+ 		});
+ 		
+ 	});
+	
+	
 	//Going back to eid
 	$(document).on("click",".btn_back_eid",function(event){
 		event.preventDefault();
@@ -112,6 +198,8 @@ $(document).ready(function(){
 		document.location.hash ="eid_management";
 		
 	});
+	
+	
 	
 	
 });

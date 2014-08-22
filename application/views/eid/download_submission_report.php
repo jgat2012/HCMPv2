@@ -1,6 +1,7 @@
 <?php
 header("Content-type: application/vnd.ms-excel");
 header("Content-Disposition: attachment;Filename=$monthname$year CONSUMPTION.xls");
+?>
 <font color="#0000FF" style="font-size:large">APPROVED CONSUMPTION REPORT :: TAQMAN [ <?php echo strtoupper($labname);?>&nbsp;-&nbsp;<?php echo $monthname.' '.$year;?> ]</font> 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font style="font-family:monospace; font-size:11.5px">Date Submitted : <?php echo $datesubmitted;?> </font>
 <table><!--mother table -->

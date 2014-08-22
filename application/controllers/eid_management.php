@@ -2,7 +2,7 @@
 
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
-
+ 
 include_once ('home_controller.php');
 
 class Eid_Management extends Home_controller {
@@ -19,10 +19,10 @@ class Eid_Management extends Home_controller {
 		$data['lab_submissions'] = $this ->getLabSubmissions();
 		$data['banner_text'] = 'EID / VL Home';
         $data['content_view'] = 'eid/home_v';
-        $data['title'] = 'eid/home_v';
+        $data['title'] = 'EID/VL';
         $this->load->view("eid/template", $data);
 		
-		
+
 	}
 	function home(){
 		$data = array();
@@ -112,7 +112,7 @@ class Eid_Management extends Home_controller {
 		    }
 		}
 		
-		$data['percentDone_submission'] = ceil($percentDone_submission*100/7);
+		$percentDone_submission = ceil($percentDone_submission*100/7);
 		
 		if ($percentDone_submission < 70 ){
     		$color_submission = $color['low'];
@@ -225,7 +225,7 @@ class Eid_Management extends Home_controller {
 					$kisumu_kit_imgtype = 'green';
 					
 					if ( ($ctchecktaq == 0) and ($ctcheckabb == 0) ){ //..if both taqman & abbott have been received at SCMS / KEMSA
-					    $kisumu_showview = '<small><u><a class="btn_approve" href="'.base_url().'eid_management/consumption/2/'.$lab_id.'/'.$lastmonth.'/'.$year.'">Approve</a></u></small>';
+					    $kisumu_showview = '<small><img src="'.base_url().'assets/img//arrow.gif" alt="..">&nbsp;<u><a class="btn_approve" href="'.base_url().'eid_management/consumption/2/'.$lab_id.'/'.$lastmonth.'/'.$year.'">Approve</a></u></small>';
 						$approved = '0';
 						
 					}else if ( ($ctchecktaq > 0) and ($ctcheckabb > 0) ){ //..if both taqman & abbott have been received at SCMS / KEMSA
@@ -282,7 +282,7 @@ class Eid_Management extends Home_controller {
 	        return $display;
 	}
 	
-	function consumption($left='',$lab='',$lastmonth='',$year=''){
+	function consumption($left='',$lab='',$lastmonth='',$year='',$approve_plat=''){
 		$data = array();
 		$approve_left		= $left; 
 		$approve_lab		= $lab;
@@ -304,18 +304,19 @@ class Eid_Management extends Home_controller {
 		else if ($approve_lastmonth == 11) 	{ $monthname = 'NOV'; $lastmonthname = 'OCT';}
 		else if ($approve_lastmonth == 12) 	{ $monthname = 'DEC'; $lastmonthname = 'NOV';}
 		
-		if 		($approve_left == 2) 						 { $left = 'TAQMAN & ABBOTT'; $formaction = 'eid_management/approve/approvetaqmanreport';}
-		else if (($approve_left == 1) and ($approve_plat = 1)) { $left = 'TAQMAN';  $formaction = 'eid_management/approve/approvetaqmanreport';}
-		else if (($approve_left == 1) and ($approve_plat = 2)) { $left = 'ABBOTT';  $formaction = 'eid_management/approve/approveabbottreport';}
+		if 		($approve_left == 2) 						   {$plat = 1; $left = 'TAQMAN & ABBOTT'; $formaction = 'eid_management/approve/approvetaqmanreport';}
+		else if (($approve_left == 1) and (@$approve_plat = 1)) {$plat = 1; $left = 'TAQMAN';  $formaction = 'eid_management/approve/approvetaqmanreport';}
+		else if (($approve_left == 1) and (@$approve_plat = 2)) {$plat = 2; $left = 'ABBOTT';  $formaction = 'eid_management/approve/approveabbottreport';}
 		
 		$data['formaction'] = $formaction;
 		$data['approve_left'] = $approve_left;
 		$data['labname'] = $labname;
-		$data['left'] = $left;
+		$data['left'] = $plat;
 		$data['monthname'] = $monthname;
 		$data['approve_lab'] = $approve_lab;
-		$data['approve_lastmonth'] = $approve_lastmonth;
 		$data['approve_year'] = $approve_year;
+		$data['approve_lastmonth'] = $approve_lastmonth;
+		
 		
 		$this ->load ->view("eid/approval_form",$data);
 	}
@@ -363,6 +364,8 @@ class Eid_Management extends Home_controller {
 		$previousmonth = date('n', strtotime(date($year.'-'.$lastmonth, mktime()) . " - 1 months"));//..eg if current month = May; submission should be for Apr; opening balance Apr should be end bal Mar
 		$pyear = date('Y', strtotime(date($year.'-'.$lastmonth, mktime()) . " - 1 months"));
 		
+		$data['approval'] = @$this ->input ->post("approval");//Check if load page for approval
+		//echo $data['approval'].' '.$platform;die();
 		//TAQMAN
 		if($platform==1){
 			$openingqualkit		=0;
@@ -652,9 +655,9 @@ class Eid_Management extends Home_controller {
 			
 			
 			$data["platform"] = "TAQMAN";
-			$this ->load ->view("eid/submit_report_details",$data);
 		
 		}elseif($platform==2){//ABOTT CONSUMPTION REPORT
+			//echo $data['approval'].' '.$platform;die();
 			//Initialize
 			$openingqualkit 		= 0;
 			$openingcalibration  	= 0;
@@ -908,11 +911,13 @@ class Eid_Management extends Home_controller {
 			}
 						
 			//..END -> VIRAL LOAD
-			
-			
 			$data["platform"] = "ABBOTT";
-			$this ->load ->view("eid/submit_report_details",$data);
 			
+		}
+		if(@$this ->input ->post("approval")==1){//For approval
+			$this ->load ->view("eid/submission_report_approval",$data);
+		}else{
+			$this ->load ->view("eid/submit_report_details",$data);
 		}
 		
 		
@@ -944,10 +949,255 @@ class Eid_Management extends Home_controller {
         return $data;
 	}
 	
-	//Download taqman and abbott submission reports
-	function download_submission_report($type = ""){
+	//Approve
+	function approve_reports(){
 		
+		//if($this ->input ->post("btn_approve_reports")){
+			$platform = $this ->input ->post("platform");
+			$table ="";
+			
+			//TAQMAN Submission
+			if($platform=="TAQMAN"){
+			$table = "eid_taqmanprocurement";	
+			//eid kits
+			$oqualkit = $_POST['oqualkit']; 
+			$recqualkit  = $_POST['recqualkit']; 
+			$kitlotno  = $_POST['kitlotno']; 
+			$uqualkit  = $_POST['uqualkit']; 
+			$wqualkit = $_POST['wqualkit']; 
+			$pqualkit = $_POST['pqualkit']; 
+			$iqualkit = $_POST['iqualkit']; 
+			$equalkit = $_POST['equalkit']; 
+			$rqualkit = $_POST['rqualkit']; 
+			//sample pre extraction reagent
+			$ospexagent = $_POST['ospexagent'];		
+			$recspexagent= $_POST['recspexagent'];	
+			$uspexagent  = $_POST['uspexagent'];	
+			$wspexagent  = $_POST['wspexagent'];	
+			$pspexagent = $_POST['pspexagent'];	
+			$ispexagent = $_POST['ispexagent'];	
+			$espexagent = $_POST['espexagent'];	
+			$rspexagent = $_POST['rspexagent'];	
+			//Ampliprep Input S-tube
+			//3
+			
+			$oampinput = $_POST['oampinput'];	
+			$recampinput  = $_POST['recampinput'];	
+			$uampinput  = $_POST['uampinput'];	
+			$wampinput  = $_POST['wampinput'];	
+			$pampinput  = $_POST['pampinput'];	
+			$iampinput  = $_POST['iampinput'];	
+			$eampinput  = $_POST['eampinput'];	
+			$rampinput = $_POST['rampinput'];	 
+			  
+			//4
+			
+			$oampflapless = $_POST['oampflapless'];	
+			$recampflapless  = $_POST['recampflapless'];	
+			$uampflapless  = $_POST['uampflapless'];	
+			$wampflapless  = $_POST['wampflapless'];	
+			$pampflapless  = $_POST['pampflapless'];	
+			$iampflapless  = $_POST['iampflapless'];	
+			$eampflapless = $_POST['eampflapless'];	
+			$rampflapless  = $_POST['rampflapless'];	
+					
+			//5
+			
+			$oampwash  = $_POST['oampwash'];	
+			$recampwash  = $_POST['recampwash'];	
+			$uampwash  = $_POST['uampwash'];	
+			$wampwash = $_POST['wampwash'];	
+			$pampwash  = $_POST['pampwash'];	
+			$iampwash  = $_POST['iampwash'];	
+			$eampwash  = $_POST['eampwash'];	
+			$rampwash  = $_POST['rampwash'];	
+			
+			//6
+			
+			$oampktips  = $_POST['oampktips'];	
+			$recampktips  = $_POST['recampktips'];	
+			$uampktips  = $_POST['uampktips'];	
+			$wampktips  = $_POST['wampktips'];	
+			$pampktips  = $_POST['pampktips'];	
+			$iampktips  = $_POST['iampktips'];	
+			$eampktips  = $_POST['eampktips'];	
+			$rampktips  = $_POST['rampktips'];	
+			
+			//7
+			
+			$oktubes  = $_POST['oktubes'];	
+			$recktubes  = $_POST['recktubes'];	
+			$uktubes  = $_POST['uktubes'];	
+			$wktubes  = $_POST['wktubes'];	
+			$pktubes  = $_POST['pktubes'];	
+			$iktubes = $_POST['iktubes'];	
+			$ektubes = $_POST['ektubes'];	
+			$rktubes  = $_POST['rktubes'];	
+			
+			//8
+			
+			$oconsumables = $_POST['oconsumables'];	
+			$recconsumables  = $_POST['recconsumables'];	
+			$uconsumables  = $_POST['uconsumables'];	
+			$wconsumables  = $_POST['wconsumables'];	
+			$pconsumables  = $_POST['pconsumables'];	
+			$iconsumables = $_POST['iconsumables'];	
+			$econsumables  = $_POST['econsumables'];	
+			$rconsumables  = $_POST['rconsumables'];	
+										   
+			//issued out comments
+			$icomments = $_POST['icomments'];	
+			$rowID = $_POST['rowID'];	
+					
+			//viral load
+			//1
+			$voqualkit = $_POST['voqualkit']; 
+			$vrecqualkit  = $_POST['vrecqualkit']; 
+			$vkitlotno  = $_POST['vkitlotno']; 
+			$vuqualkit  = $_POST['vuqualkit']; 
+			$vwqualkit = $_POST['vwqualkit']; 
+			$vpqualkit = $_POST['vpqualkit']; 
+			$viqualkit = $_POST['viqualkit']; 
+			$vequalkit = $_POST['vequalkit']; 
+			$rvqualkit = $_POST['rvqualkit']; 
+			//2
+			$vospexagent = $_POST['vospexagent'];		
+			$vrecspexagent= $_POST['vrecspexagent'];	
+			$vuspexagent  = $_POST['vuspexagent'];	
+			$vwspexagent  = $_POST['vwspexagent'];	
+			$vpspexagent = $_POST['vpspexagent'];	
+			$vispexagent = $_POST['vispexagent'];	
+			$vespexagent = $_POST['vespexagent'];	
+			$rvspexagent = $_POST['rvspexagent'];	
+			
+			//3
+			
+			$voampinput = $_POST['voampinput'];	
+			$vrecampinput  = $_POST['vrecampinput'];	
+			$vuampinput  = $_POST['vuampinput'];	
+			$vwampinput  = $_POST['vwampinput'];	
+			$vpampinput  = $_POST['vpampinput'];	
+			$viampinput  = $_POST['viampinput'];	
+			$veampinput  = $_POST['veampinput'];	
+			$rvampinput = $_POST['rvampinput'];	 
+			
+			//4
+			
+			$voampflapless = $_POST['voampflapless'];	
+			$vrecampflapless  = $_POST['vrecampflapless'];	
+			$vuampflapless  = $_POST['vuampflapless'];	
+			$vwampflapless  = $_POST['vwampflapless'];	
+			$vpampflapless  = $_POST['vpampflapless'];	
+			$viampflapless  = $_POST['viampflapless'];	
+			$veampflapless = $_POST['veampflapless'];	
+			$rvampflapless  = $_POST['rvampflapless'];	
+			
+			//5
+			
+			$voampwash  = $_POST['voampwash'];	
+			$vrecampwash  = $_POST['vrecampwash'];	
+			$vuampwash  = $_POST['vuampwash'];	
+			$vwampwash = $_POST['vwampwash'];	
+			$vpampwash  = $_POST['vpampwash'];	
+			$viampwash  = $_POST['viampwash'];	
+			$veampwash  = $_POST['veampwash'];	
+			$rvampwash  = $_POST['rvampwash'];	
+			
+			//6
+			
+			$voampktips  = $_POST['voampktips'];	
+			$vrecampktips  = $_POST['vrecampktips'];	
+			$vuampktips  = $_POST['vuampktips'];	
+			$vwampktips  = $_POST['vwampktips'];	
+			$vpampktips  = $_POST['vpampktips'];	
+			$viampktips  = $_POST['viampktips'];	
+			$veampktips  = $_POST['veampktips'];	
+			$rvampktips  = $_POST['rvampktips'];	
+			
+			//7
+			
+			$voktubes  = $_POST['voktubes'];	
+			$vrecktubes  = $_POST['vrecktubes'];	
+			$vuktubes  = $_POST['vuktubes'];	
+			$vwktubes  = $_POST['vwktubes'];	
+			$vpktubes  = $_POST['vpktubes'];	
+			$viktubes = $_POST['viktubes'];	
+			$vektubes = $_POST['vektubes'];	
+			$rvktubes  = $_POST['rvktubes'];	
+			
+			//8
+			
+			$voconsumables = $_POST['voconsumables'];	
+			$vrecconsumables  = $_POST['vrecconsumables'];	
+			$vuconsumables  = $_POST['vuconsumables'];	
+			$vwconsumables  = $_POST['vwconsumables'];	
+			$vpconsumables  = $_POST['vpconsumables'];	
+			$viconsumables = $_POST['viconsumables'];	
+			$veconsumables  = $_POST['veconsumables'];	
+			$rvconsumables  = $_POST['rvconsumables'];	
+			
+			//issued out comments
+			$vicomments= $_POST['vicomments'];	
+			$vrowID = $_POST['vrowID'];	
+			
+			
+			//..pos comments for eid
+			$receivedtestkitlotnno= $_POST['receivedtestkitlotnno'];
+			$receivedfrom= $_POST['receivedfrom'];
+			$receiveddate =$_POST['receiveddate'];
+			$receivedby= $_POST['receivedby'];
+			//..pos comments for vl
+			$vreceivedtestkitlotnno= $_POST['vreceivedtestkitlotnno'];
+			$vreceivedfrom= $_POST['vreceivedfrom'];
+			$vreceiveddate =$_POST['vreceiveddate'];
+			$vreceivedby= $_POST['vreceivedby'];
+			
+			//tests one ied
+			$vtestsdone = $_POST['vtestsdone'];	
+			
+			//overall  comments
+			$comments = $_POST['comments'];	
+			//approvedby lab
+			$approvedbylab= $_POST['approvedbylab'];	
+			
+			$reporttitle= $_POST['reporttitle'];							   
+			//tests one ied
+			$eidtestsdone = $_POST['eidtestsdone'];	
+			//..send sms to lab of approval then update the respective tables of this change	
+			$ssmonth 	= $_POST['lastmonth'];		
+			$ssyear		= $_POST['year'];
+			$mname		= $_POST['monthname'];
+			$lab 		= $_POST['lab'];
+			$labname 	= $_POST['labname'];
+			
+			$smonth = $ssmonth;
+				if ($smonth == 1) { $psmonth = 'JAN'; } else if ($smonth == 2) { $psmonth = 'FEB';} else if ($smonth == 3) { $psmonth = 'MAR';} else if ($smonth == 4) { $psmonth = 'APR';} else if ($smonth == 5) { $psmonth = 'MAY';} else if ($smonth == 6) { $psmonth = 'JUN';} else if ($smonth == 7) { $psmonth = 'JUL';} else if ($smonth == 8) { $psmonth = 'AUG';} else if ($smonth == 9) { $psmonth = 'SEP';} else if ($smonth == 10) { $psmonth = 'OCT';} else if ($smonth == 11) { $psmonth = 'NOV';} else if ($smonth == 12) { $psmonth = 'DEC';}
+			
+			}
+			
+			
+			//..update the respective taqman procurement table that the report for this indicated month has been approved
+			$update_procurement = $this ->db ->query("UPDATE $table SET received = 1 WHERE monthofrecordset = '$ssmonth' AND yearofrecordset = '$ssyear' AND lab = '$lab'");
+			//..end -> update
+			//..check if lab has abbott; if so, redirect to abbott page; else redirect to homepage
+			$platformquery=$this ->db ->query("SELECT abbott as abb from eid_labs where ID = '$lab' "); 
+			$platformavailable = $platformquery ->result_array(); 
+			$platformresult=$platformavailable[0]['abb'];
+			$data  = array();
+			$data['lab'] 			= $lab;
+			$data['lab_name'] 		= $labname;
+			$data['platform'] 		= $platform;//name
+			$data['month'] 			= $ssmonth;
+			$data['month_name'] 	= $mname;
+			$data['year'] 			= $ssyear;
+			$data['platformresult'] = $platformresult;
+			echo json_encode($data);die();
+			
+								
+			
+		//}
 	}
+	
 
    
 }

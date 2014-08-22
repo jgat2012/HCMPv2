@@ -9,9 +9,9 @@
 			<div class="navigation" id="sub-nav">
 				<ul class="tabbed">
 					<li><a href="<?php echo base_url(); ?>eid_management"><i class="fa fa-3x fa-home"></i></a></li>
-					<li>&nbsp;|&nbsp;</li>				
-					<li id="health_facility"><a href="#">Health Facility Requisitions</a></li>
-					<li>&nbsp;|&nbsp;</li>
+					<!--<li>&nbsp;|&nbsp;</li>				
+					<!--<li id="health_facility"><a href="#">Health Facility Requisitions </a></li> 
+					<li>&nbsp;|&nbsp;</li>-->
 				</ul>
 				
 				<div class="clearer">&nbsp;</div>
