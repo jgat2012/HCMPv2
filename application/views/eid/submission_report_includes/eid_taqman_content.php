@@ -29,7 +29,7 @@
 	<td><div align="center">
 	  <input type="text" class="input-sm"    value="<?php echo @$rqualkit;?>" name="o_rqualkit" size="5" style = "background:#F6F6F6;font-weight:bold;" />
     </div></td>
-    <td><div align="center">
+    <td class="allocate_column"><div align="center">
 	  <input type="text" class="input-sm"    value="<?php echo @$rqualkit;?>" name="rqualkit" size="5" style = "background:#F6F6F6;font-weight:bold;" />
     </div></td>
 </tr>
@@ -63,7 +63,7 @@
 	<td style="background-color:#FFFFFF"><div align="center">
 	  <input type="text" class="input-sm"   value="<?php echo @$rspexagent;?>" name="o_rspexagent" size="5" style = "background:#FFFFFF;font-weight:bold;"/>
     </div></td>
-    <td style="background-color:#FFFFFF"><div align="center">
+    <td style="background-color:#FFFFFF" class="allocate_column"><div align="center">
 	  <input type="text" class="input-sm"   value="<?php echo @$rspexagent;?>" name="rspexagent" size="5" style = "background:#FFFFFF;font-weight:bold;"/>
     </div></td>
 </tr>
@@ -96,7 +96,7 @@
 <td><div align="center">
   <input type="text" class="input-sm"   value="<?php echo @$rampinput;?>" name="o_rampinput" size="5" style = "background:#F6F6F6;font-weight:bold;" />
 </div></td>
-<td><div align="center">
+<td class="allocate_column"><div align="center">
   <input type="text" class="input-sm"   value="<?php echo @$rampinput;?>" name="rampinput" size="5" style = "background:#F6F6F6;font-weight:bold;" />
 </div></td>
 </tr>
@@ -129,7 +129,7 @@
 <td style="background-color:#FFFFFF"><div align="center">
   <input type="text" class="input-sm"   value="<?php echo @$rampflapless;?>" name="o_rampflapless" size="5" style = "background:#FFFFFF;font-weight:bold;" />
 </div></td>
-<td style="background-color:#FFFFFF"><div align="center">
+<td style="background-color:#FFFFFF" class="allocate_column"><div align="center">
   <input type="text" class="input-sm"   value="<?php echo @$rampflapless;?>" name="rampflapless" size="5" style = "background:#FFFFFF;font-weight:bold;" />
 </div></td>
 </tr>			
@@ -162,7 +162,7 @@
 <td><div align="center">
   <input type="text" class="input-sm"   value="<?php echo @$rampwash;?>" name="o_rampwash" size="5" style = "background:#F6F6F6;font-weight:bold;" />
 </div></td>
-<td><div align="center">
+<td class="allocate_column"><div align="center">
   <input type="text" class="input-sm"   value="<?php echo @$rampwash;?>" name="rampwash" size="5" style = "background:#F6F6F6;font-weight:bold;" />
 </div></td>
 </tr>
@@ -195,7 +195,7 @@
 <td style="background-color:#FFFFFF"><div align="center">
   <input type="text" class="input-sm"   value="<?php echo @$rampktips;?>" name="o_rampktips" size="5" style = "background:#FFFFFF;font-weight:bold;" />
 </div></td>
-<td style="background-color:#FFFFFF"><div align="center">
+<td style="background-color:#FFFFFF" class="allocate_column"><div align="center">
   <input type="text" class="input-sm"   value="<?php echo @$rampktips;?>" name="rampktips" size="5" style = "background:#FFFFFF;font-weight:bold;" />
 </div></td>
 </tr>
@@ -228,7 +228,7 @@
 <td><div align="center">
   <input type="text" class="input-sm"   value="<?php echo @$rktubes;?>" name="o_rktubes" size="5" style = "background:#F6F6F6;font-weight:bold;" />
 </div></td>
-<td><div align="center">
+<td class="allocate_column"><div align="center">
   <input type="text" class="input-sm"   value="<?php echo @$rktubes;?>" name="rktubes" size="5" style = "background:#F6F6F6;font-weight:bold;" />
 </div></td>
 </tr>
@@ -240,7 +240,7 @@
 <!--</tr>
 <tr class="even"> -->
 <td colspan="3" style="background-color:#F2F2F2"><div align="right"><strong>Comments concerning <font color="#009900">positive adjustments</font><br /><small>( eg. where were the kits were received from. )</small></strong></div></td>
-  <td colspan="3">
+  <td colspan="4">
   <input type="hidden" name="rowID" size="5" value="<?php echo @$rowID;?>" style = "background:#FFFFCC; font-weight:bold"/>
  <input type="hidden" name="receivedtestkitlotnno"  value="<?php echo @$kitlotno;?>" />
  <input type="hidden" name="receivedfrom"  value="<?php echo @$labfrom;?>" />
